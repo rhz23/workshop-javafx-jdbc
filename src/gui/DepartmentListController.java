@@ -48,7 +48,8 @@ public class DepartmentListController implements Initializable {
     @FXML
     public void onBtNewAction(ActionEvent event){
         Stage parentStage = Utils.currentStage(event);
-        createDialogForm("/gui/DepartmentForm.fxml", parentStage);
+        Department object = new Department();
+        createDialogForm(object, "/gui/DepartmentForm.fxml", parentStage);
     }
 
     //seta a variavel service com o DepartmentService que foi criado em outro lugar
@@ -86,10 +87,15 @@ public class DepartmentListController implements Initializable {
         tableViewDepartment.setItems(obsList);
     }
 
-    private void createDialogForm(String absoluteName, Stage parentStage){
+    private void createDialogForm(Department obj, String absoluteName, Stage parentStage){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName)); //carrega a view passada como parametro no absolutename
             Pane pane = loader.load(); //carrega a view
+
+            //injeção do "Department obj" no DepartmentFormController
+            DepartmentFormController controller = loader.getController(); //pegar referencia para o controlador
+            controller.setDepartment(obj); //setar o Department com o obj recebido
+            controller.updateFormData(); //atualizar os valores do FormData com os valores do obj acima
 
             Stage dialogStage = new Stage(); //como sera criada uma janela na frente de outra, é necessário criar um novo "palco" (stage) de forma que é necessário instanciar um novo stage para comportar a nova janela
             dialogStage.setTitle("Department data"); // titulo da janela
