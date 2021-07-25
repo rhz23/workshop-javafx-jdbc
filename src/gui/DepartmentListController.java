@@ -1,6 +1,7 @@
 package gui;
 
 import application.Main;
+import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Utils;
 import javafx.collections.FXCollections;
@@ -26,7 +27,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class DepartmentListController implements Initializable {
+public class DepartmentListController implements Initializable, DataChangeListener {
 
     //Dependencia da classe DepartmentService (criada a variavel service do tipo DepartmentService)
     private DepartmentService service;
@@ -96,6 +97,7 @@ public class DepartmentListController implements Initializable {
             DepartmentFormController controller = loader.getController(); //pegar referencia para o controlador
             controller.setDepartment(obj); //setar o Department com o obj recebido
             controller.setDepartmentService(new DepartmentService());
+            controller.subscribeDataChangeListener(this); //se inscreve para escutar os eventos de mudança
             controller.updateFormData(); //atualizar os valores do FormData com os valores do obj acima
 
             Stage dialogStage = new Stage(); //como sera criada uma janela na frente de outra, é necessário criar um novo "palco" (stage) de forma que é necessário instanciar um novo stage para comportar a nova janela
@@ -109,5 +111,10 @@ public class DepartmentListController implements Initializable {
         catch (IOException e){
             Alerts.showAlert("IO Exception", "Error Loading View", e.getMessage(), Alert.AlertType.ERROR);
         }
+    }
+
+    @Override
+    public void onDataChanged() {
+        updateTableView(); //quando há um evento de mudança, chama o método de atualização da visão da tabela
     }
 }
