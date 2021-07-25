@@ -95,6 +95,7 @@ public class DepartmentListController implements Initializable {
             //injeção do "Department obj" no DepartmentFormController
             DepartmentFormController controller = loader.getController(); //pegar referencia para o controlador
             controller.setDepartment(obj); //setar o Department com o obj recebido
+            controller.setDepartmentService(new DepartmentService());
             controller.updateFormData(); //atualizar os valores do FormData com os valores do obj acima
 
             Stage dialogStage = new Stage(); //como sera criada uma janela na frente de outra, é necessário criar um novo "palco" (stage) de forma que é necessário instanciar um novo stage para comportar a nova janela
